@@ -226,7 +226,8 @@ class MaterialApp extends StatefulWidget {
     this.onGenerateInitialRoutes,
     this.onUnknownRoute,
     this.onNavigationNotification,
-    List<NavigatorObserver> this.navigatorObservers = const <NavigatorObserver>[],
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
     this.builder,
     this.title = '',
     this.onGenerateTitle,
@@ -359,7 +360,8 @@ class MaterialApp extends StatefulWidget {
   final RouteFactory? onUnknownRoute;
 
   /// {@macro flutter.widgets.widgetsApp.onNavigationNotification}
-  final NotificationListenerCallback<NavigationNotification>? onNavigationNotification;
+  final NotificationListenerCallback<NavigationNotification>?
+  onNavigationNotification;
 
   /// {@macro flutter.widgets.widgetsApp.navigatorObservers}
   final List<NavigatorObserver>? navigatorObservers;
@@ -842,10 +844,15 @@ class MaterialScrollBehavior extends ScrollBehavior {
   const MaterialScrollBehavior();
 
   @override
-  TargetPlatform getPlatform(BuildContext context) => Theme.of(context).platform;
+  TargetPlatform getPlatform(BuildContext context) =>
+      Theme.of(context).platform;
 
   @override
-  Widget buildScrollbar(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildScrollbar(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     // When modifying this function, consider modifying the implementation in
     // the base class ScrollBehavior as well.
     switch (axisDirectionToAxis(details.direction)) {
@@ -867,7 +874,11 @@ class MaterialScrollBehavior extends ScrollBehavior {
   }
 
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     // When modifying this function, consider modifying the implementation in
     // the base class ScrollBehavior as well.
     final AndroidOverscrollIndicator indicator = Theme.of(context).useMaterial3
@@ -904,7 +915,8 @@ class MaterialScrollBehavior extends ScrollBehavior {
 class _MaterialAppState extends State<MaterialApp> {
   late HeroController _heroController;
 
-  bool get _usesRouter => widget.routerDelegate != null || widget.routerConfig != null;
+  bool get _usesRouter =>
+      widget.routerDelegate != null || widget.routerConfig != null;
 
   @override
   void initState() {
@@ -925,7 +937,8 @@ class _MaterialAppState extends State<MaterialApp> {
   // _MaterialLocalizationsDelegate.
   Iterable<LocalizationsDelegate<dynamic>> get _localizationsDelegates {
     return <LocalizationsDelegate<dynamic>>[
-      if (widget.localizationsDelegates != null) ...widget.localizationsDelegates!,
+      if (widget.localizationsDelegates != null)
+        ...widget.localizationsDelegates!,
       DefaultMaterialLocalizations.delegate,
       DefaultCupertinoLocalizations.delegate,
     ];
@@ -987,7 +1000,9 @@ class _MaterialAppState extends State<MaterialApp> {
     ThemeData? theme;
     // Resolve which theme to use based on brightness and high contrast.
     final ThemeMode mode = widget.themeMode ?? ThemeMode.system;
-    final Brightness platformBrightness = MediaQuery.platformBrightnessOf(context);
+    final Brightness platformBrightness = MediaQuery.platformBrightnessOf(
+      context,
+    );
     final bool useDarkTheme =
         mode == ThemeMode.dark ||
         (mode == ThemeMode.system && platformBrightness == ui.Brightness.dark);
@@ -1001,7 +1016,9 @@ class _MaterialAppState extends State<MaterialApp> {
     }
     theme ??= widget.theme ?? ThemeData();
     SystemChrome.setSystemUIOverlayStyle(
-      theme.brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      theme.brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
     );
 
     return theme;
@@ -1010,7 +1027,8 @@ class _MaterialAppState extends State<MaterialApp> {
   Widget _materialBuilder(BuildContext context, Widget? child) {
     final ThemeData theme = _themeBuilder(context);
     final Color effectiveSelectionColor =
-        theme.textSelectionTheme.selectionColor ?? theme.colorScheme.primary.withOpacity(0.40);
+        theme.textSelectionTheme.selectionColor ??
+        theme.colorScheme.primary.withOpacity(0.40);
     final Color effectiveCursorColor =
         theme.textSelectionTheme.cursorColor ?? theme.colorScheme.primary;
 
@@ -1047,7 +1065,9 @@ class _MaterialAppState extends State<MaterialApp> {
     if (widget.themeAnimationStyle != AnimationStyle.noAnimation) {
       childWidget = AnimatedTheme(
         data: theme,
-        duration: widget.themeAnimationStyle?.duration ?? widget.themeAnimationDuration,
+        duration:
+            widget.themeAnimationStyle?.duration ??
+            widget.themeAnimationDuration,
         curve: widget.themeAnimationStyle?.curve ?? widget.themeAnimationCurve,
         child: childWidget,
       );
@@ -1066,7 +1086,8 @@ class _MaterialAppState extends State<MaterialApp> {
     // Android's switcher UI.
     //
     // blue is the primary color of the default theme.
-    final Color materialColor = widget.color ?? widget.theme?.primaryColor ?? Colors.blue;
+    final Color materialColor =
+        widget.color ?? widget.theme?.primaryColor ?? Colors.blue;
     if (_usesRouter) {
       return WidgetsApp.router(
         key: GlobalObjectKey(this),
@@ -1090,7 +1111,8 @@ class _MaterialAppState extends State<MaterialApp> {
         showSemanticsDebugger: widget.showSemanticsDebugger,
         debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
         exitWidgetSelectionButtonBuilder: _exitWidgetSelectionButtonBuilder,
-        moveExitWidgetSelectionButtonBuilder: _moveExitWidgetSelectionButtonBuilder,
+        moveExitWidgetSelectionButtonBuilder:
+            _moveExitWidgetSelectionButtonBuilder,
         tapBehaviorButtonBuilder: _tapBehaviorButtonBuilder,
         shortcuts: widget.shortcuts,
         actions: widget.actions,
@@ -1126,7 +1148,8 @@ class _MaterialAppState extends State<MaterialApp> {
       showSemanticsDebugger: widget.showSemanticsDebugger,
       debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
       exitWidgetSelectionButtonBuilder: _exitWidgetSelectionButtonBuilder,
-      moveExitWidgetSelectionButtonBuilder: _moveExitWidgetSelectionButtonBuilder,
+      moveExitWidgetSelectionButtonBuilder:
+          _moveExitWidgetSelectionButtonBuilder,
       tapBehaviorButtonBuilder: _tapBehaviorButtonBuilder,
       shortcuts: widget.shortcuts,
       actions: widget.actions,
@@ -1144,7 +1167,9 @@ class _MaterialAppState extends State<MaterialApp> {
             event.logicalKey != LogicalKeyboardKey.escape) {
           return KeyEventResult.ignored;
         }
-        return Tooltip.dismissAllToolTips() ? KeyEventResult.handled : KeyEventResult.ignored;
+        return Tooltip.dismissAllToolTips()
+            ? KeyEventResult.handled
+            : KeyEventResult.ignored;
       },
       child: result,
     );
@@ -1263,11 +1288,15 @@ class _MaterialInspectorButton extends InspectorButton {
 
   Color _primaryColor(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return isDarkTheme ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.primaryContainer;
+    return isDarkTheme
+        ? theme.colorScheme.onPrimaryContainer
+        : theme.colorScheme.primaryContainer;
   }
 
   Color _secondaryColor(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return isDarkTheme ? theme.colorScheme.primaryContainer : theme.colorScheme.onPrimaryContainer;
+    return isDarkTheme
+        ? theme.colorScheme.primaryContainer
+        : theme.colorScheme.onPrimaryContainer;
   }
 }
